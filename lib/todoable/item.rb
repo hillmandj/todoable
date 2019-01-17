@@ -7,8 +7,7 @@ module Todoable
     end
 
     def self.find(list, id)
-      response = Todoable.client.get("#{path(list)}/#{id}")
-      build_instance(id, response)
+      raise NotImplementedError.new("This endpoint does not exist!")
     end
 
     def self.destroy(list, id)
@@ -35,6 +34,10 @@ module Todoable
       response = Todoable.client.post(self.class.path(list), build_payload)
       assign_attributes_from_response(response)
       self
+    end
+
+    def update
+      raise NotImplementedError.new("This endpoint does not exist!")
     end
 
     def destroy
