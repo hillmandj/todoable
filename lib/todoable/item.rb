@@ -26,7 +26,7 @@ module Todoable
     end
 
     def path
-      raise(InvalidRequestError, "Please pass an identifiers") unless list && id
+      raise(InvalidRequestError, "Requires a list and identifier.") unless list && id
       "#{self.class.path(list)}/#{id}"
     end
 

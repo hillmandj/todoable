@@ -66,7 +66,7 @@ module Todoable
     def build_payload
       payload = {}.tap do |hash|
         key = self.class.name.split('::').last.downcase.to_sym
-        value = as_json.select { |k, _| k == :name }
+        value = as_json.select { |k, _| k == :name } # only sending :name for now
         hash[key] = value
       end
 

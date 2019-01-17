@@ -4,7 +4,7 @@ module Todoable
   class ResponseMiddleware < Faraday::Response::Middleware
     def call(env)
       response = @app.call(env)
-      body = JSON.parse(env[:body])
+      body = JSON.parse(env[:body]) rescue {} # rescuing in case of empty body
 
       case response.status
       when 400
