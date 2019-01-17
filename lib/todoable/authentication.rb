@@ -14,7 +14,7 @@ module Todoable
       @response = JSON.parse(client.post.body)
       @token = @response['token']
     rescue => e
-      raise AuthenticationError.new("Invalid Credentials", 404)
+      raise AuthenticationError.new("Invalid Credentials", 401)
     end
 
     private

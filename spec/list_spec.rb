@@ -244,11 +244,16 @@ describe Todoable::List do
     subject(:add_item) { list.add_item(name) }
 
     let(:name) { 'Item Name' }
-    let(:item) { instance_double(Todoable::Item) }
+    let(:path) { item.class.path(list) }
+    let(:payload) { { 'name': name } }
+    let!(:item) { Todoable::Item.new(list: list, name: name) }
 
     before do
       allow(Todoable::Item).to receive(:new).and_return(item)
-      allow(item).to receive(:create).and_return(item)
+      allow(item).to receive(:create).and_call_original
+
+      stub_request(:post, path)
+        .to_return(status: 201, body: payload.to_json)
     end
 
     it_behaves_like 'a request that can refresh the auth token'

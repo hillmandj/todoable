@@ -37,7 +37,9 @@ describe Todoable::Authentication do
           .to_return(status: 401)
       end
 
-      it { is_expected.to be_nil }
+      it 'raises' do
+        expect { fetch_token }.to raise_error(Todoable::AuthenticationError)
+      end
     end
   end
 end

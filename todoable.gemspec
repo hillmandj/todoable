@@ -11,9 +11,10 @@ Gem::Specification.new do |s|
   s.email        = ['hillmandj@gmail.com']
   s.version      = Todoable::VERSION
   s.homepage     = 'http://github.com/hillmandj/todoable'
+  s.license      = 'MIT'
 
   # Files & paths
-  s.files        = Dir['lib/**/*', 'LICENSE', 'README.md', 'CHANGELOG.md']
+  s.files        = Dir['lib/**/*', 'README.md']
   s.test_files   = Dir['spec/**/*']
   s.require_path = ['lib']
 
