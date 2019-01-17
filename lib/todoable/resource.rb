@@ -15,10 +15,6 @@ module Todoable
       build_instance(id, response)
     end
 
-    def self.create(params)
-      new(params).create
-    end
-
     def self.destroy(id)
       new(id: id).destroy
     end
@@ -29,8 +25,6 @@ module Todoable
       {}
     end
 
-    # Helper method for instantiating objects based on response.
-    # id is passed since it is not guaranteed.
     def self.build_instance(id, response)
       attributes = parse(response)
       self.new(attributes.merge(id: id))
@@ -48,8 +42,8 @@ module Todoable
       self
     end
 
-    def update(params)
-      response = Todoable.client.put(path, params)
+    def update
+      response = Todoable.client.patch(path, build_payload)
       assign_attributes_from_response(response)
       self
     end
@@ -72,7 +66,7 @@ module Todoable
     def build_payload
       payload = {}.tap do |hash|
         key = self.class.name.split('::').last.downcase.to_sym
-        value = as_json.tap { |h| h.delete(:id) }
+        value = as_json.select { |k, _| k == :name }
         hash[key] = value
       end
 
@@ -80,7 +74,9 @@ module Todoable
     end
 
     def assign_attributes_from_response(response)
-      self.class.parse(response).each { |attr, value| self.send("#{attr}=", value) }
+      self.class.parse(response).each do |attribute, value|
+        self.send("#{attribute}=", value)
+      end
     end
   end
 end

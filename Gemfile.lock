@@ -45,10 +45,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  pry
+  pry (~> 0.12)
   rspec (~> 3.4)
   todoable!
-  webmock
+  webmock (~> 3.5, > 0)
 
 BUNDLED WITH
    1.16.2

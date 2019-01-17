@@ -1,16 +1,20 @@
+require 'pry'
 
 module Todoable
   class ResponseMiddleware < Faraday::Response::Middleware
     def call(env)
       response = @app.call(env)
+      body = JSON.parse(env[:body])
 
       case response.status
       when 400
-        raise InvalidRequestError.new("Bad Request", 400, env[:body])
+        raise InvalidRequestError.new("Bad Request", 400, body)
       when 401
         @app.call(set_new_token(env)) # Retry if token expired
       when 404
-        raise NotFoundError.new("Resource Not Found", 404, env[:body])
+        raise NotFoundError.new("Resource Not Found", 404, body)
+      when 422
+        raise UnprocessableError.new("Unprocessable Entity", 422, body)
       else
         response
       end

@@ -12,6 +12,7 @@ require 'todoable/response_middleware'
 # Error Objects
 require 'todoable/errors/todoable_error'
 require 'todoable/errors/not_found_error'
+require 'todoable/errors/unprocessable_error'
 require 'todoable/errors/authentication_error'
 require 'todoable/errors/invalid_request_error'
 

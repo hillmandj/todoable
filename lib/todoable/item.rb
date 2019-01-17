@@ -6,6 +6,11 @@ module Todoable
       base_url + 'lists/' + list.id + '/items'
     end
 
+    def self.find(list, id)
+      response = Todoable.client.get("#{path(list)}/#{id}")
+      build_instance(id, response)
+    end
+
     def self.destroy(list, id)
       new(list: list, id: id).destroy
     end
@@ -21,15 +26,26 @@ module Todoable
     end
 
     def path
-      raise(InvalidRequestError, "Please pass an identifier") unless list && id
-      self.class.path(list) + id
+      raise(InvalidRequestError, "Please pass an identifiers") unless list && id
+      "#{self.class.path(list)}/#{id}"
+    end
+
+    def create
+      raise InvalidRequestError.new("Must be on new instance.") if id
+      response = Todoable.client.post(self.class.path(list), build_payload)
+      assign_attributes_from_response(response)
+      self
+    end
+
+    def destroy
+      Todoable.client.delete(path)
+      list.items.delete(self)
+      true
     end
 
     def finish!
-      current_time = Time.now
-      update(finished_at: current_time)
-      finished_at = current_time
-      self
+      Todoable.client.put("#{path}/finish")
+      true
     end
   end
 end

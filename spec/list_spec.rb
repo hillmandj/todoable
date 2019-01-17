@@ -1,6 +1,22 @@
 require 'spec_helper'
 
 describe Todoable::List do
+  let(:list) { described_class.new(attributes) }
+
+  let(:attributes) do
+    {
+      id: id,
+      src: src,
+      name: name,
+      items: items
+    }
+  end
+
+  let(:id) { 'sha-id' }
+  let(:src) { 'path-to-resource' }
+  let(:name) { 'Todo List' }
+  let(:items) { [] }
+
   describe '.all' do
     subject(:request) { described_class.all }
 
@@ -48,10 +64,6 @@ describe Todoable::List do
         request
         expect(Todoable.authentication).to have_received(:fetch_token)
       end
-
-      xit 'changes the token on the client' do
-        expect { request }.to change { Todoable.client.token_auth }.to(new_token)
-      end
     end
 
     context 'when the request is valid' do
@@ -75,5 +87,18 @@ describe Todoable::List do
   end
 
   describe '.create' do
+  end
+
+  describe '#update' do
+    context 'when the response is successful' do
+      before do
+        stub_request(:put, path)
+          .to_return(status: 201)
+      end
+
+      it 'updates the list' do
+
+      end
+    end
   end
 end

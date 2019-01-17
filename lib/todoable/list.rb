@@ -24,6 +24,11 @@ module Todoable
       @items = build_item_objects(items)
     end
 
+    def add_item(name)
+      item = Item.new(list: self, name: name)
+      @items << item.create
+    end
+
     private
 
     def build_item_objects(items)

@@ -9,8 +9,9 @@ module Todoable
     end
 
     def to_s
-      status_string = "Status: #{status},"
-      "#{status_string if status} Message: #{message}"
+      status_string = "Status: #{status}," if status
+      body_string = ", Body: #{body.to_s}" unless body.empty?
+      "#{status_string} Message: #{message}#{body_string}"
     end
   end
 end
