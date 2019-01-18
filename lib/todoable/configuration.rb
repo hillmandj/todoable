@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Todoable
   class Configuration
     attr_accessor :username, :password, :base_url

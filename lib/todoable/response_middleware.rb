@@ -1,4 +1,4 @@
-require 'pry'
+# frozen_string_literal: true
 
 module Todoable
   class ResponseMiddleware < Faraday::Response::Middleware
