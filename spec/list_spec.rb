@@ -168,7 +168,7 @@ describe Todoable::List do
 
     context 'when a list object is instantiated with an id' do
       it 'raises' do
-        expect { create }.to raise_error(Todoable::InvalidRequestError)
+        expect { create }.to raise_error(Todoable::TodoableError)
       end
     end
 
@@ -224,7 +224,7 @@ describe Todoable::List do
     context 'when the response is successful' do
       before do
         stub_request(:delete, path)
-          .to_return(status: 201)
+          .to_return(status: 204)
 
         allow(Todoable.client).to receive(:delete).and_call_original
       end

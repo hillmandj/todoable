@@ -25,14 +25,18 @@ module Todoable
     end
 
     def path
-      raise(InvalidRequestError, "Requires a list and identifier.") unless list && id
+      raise InvalidRequestError.new("Requires a list and identifier.") unless list && id
       "#{self.class.path(list)}/#{id}"
     end
 
+    # POST /lists/:list_id/items
+    #
+    # Creates an item for a given list
     def create
-      raise InvalidRequestError.new("Must be on new instance.") if id
+      raise TodoableError.new("Must be on new instance.") if id
       response = Todoable.client.post(self.class.path(list), build_payload)
       assign_attributes_from_response(response)
+      list.items << self
       self
     end
 
@@ -40,12 +44,18 @@ module Todoable
       raise NotImplementedError.new("This endpoint does not exist!")
     end
 
+    # DELETE /lists/:list_id/items/:item_id
+    #
+    # Deletes an item from a list
     def destroy
       Todoable.client.delete(path)
       list.items.delete(self)
       true
     end
 
+    # PUT /lists/:list_id/items/:item_id/finish
+    #
+    # Marks an item as finished.
     def finish!
       Todoable.client.put("#{path}/finish")
       true

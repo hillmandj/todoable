@@ -7,7 +7,7 @@ module Todoable
     end
 
     def self.path
-      raise(NotImplementedError, "#{self.name} is abstract. Please refer to #{subclasses}")
+      raise NotImplementedError.new("#{self.name} is abstract.")
     end
 
     def self.find(id)
@@ -21,6 +21,8 @@ module Todoable
 
     def self.parse(response)
       JSON.parse(response.body, symbolize_names: true)
+      # Rescuing here mainly because an Unauthorized response
+      # comes back with an empty string as it's body.
     rescue JSON::ParserError => e
       {}
     end
@@ -31,12 +33,12 @@ module Todoable
     end
 
     def path
-      raise TodoableError.new("Please pass an identifier.") unless id
+      raise InvalidRequestError.new("Please pass an identifier.") unless id
       "#{self.class.path}/#{id}"
     end
 
     def create
-      raise InvalidRequestError.new("Must be on new instance.") if id
+      raise TodoableError.new("Must be on new instance.") if id
       response = Todoable.client.post(self.class.path, build_payload)
       assign_attributes_from_response(response)
       self

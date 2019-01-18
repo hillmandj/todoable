@@ -24,9 +24,11 @@ module Todoable
       @items = build_item_objects(items)
     end
 
+    # POST /lists/:list_id/items
+    #
+    # Helper method to add an item to a list.
     def add_item(name)
-      item = Item.new(list: self, name: name)
-      @items << item.create
+      Item.new(list: self, name: name).create
     end
 
     private
