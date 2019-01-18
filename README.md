@@ -2,7 +2,7 @@
 This is a gem that wraps an API that's written by the awesome team at Teachable!
 
 Basic auth credentials from Teachable are needed to use this gem. Doing so returns a token that can be used for subsequent requests.
-This token expires every 20 minutes, but the gem automatically retrieves a new token should it expire when issuing a request.
+This token expires every 20 minutes, but the gem automatically retrieves a new token should it expire. It does so by leveraging a custom middleware that's plugged into the Faraday client.
 
 ## Installation
 
@@ -40,14 +40,16 @@ Retrieves all lists. The lists in this response _do not_ include todo items.
 lists = Todoable::List.all
 ```
 
+
 **POST /lists**
 
-Creates a list.
+Creates a list. Currently, the API only supports
 
 ```ruby
 list = Todoable::List.new(name: 'My List')
 list.create
 ```
+
 
 **GET /lists/:list_id**
 
@@ -57,6 +59,7 @@ Retrieve list information. This includes the todo items in the list.
 list = Todoable::List.find(list_id)
 ```
 
+
 **PATCH /lists/:list_id**
 
 Once a list is retrieved, you can update it by altering its attributes (currently only name) like so:
@@ -65,6 +68,7 @@ Once a list is retrieved, you can update it by altering its attributes (currentl
 list.name = 'New Name'
 list.update
 ```
+
 
 **DELETE /lists/:list\_id**
 
@@ -80,6 +84,7 @@ Alternatively, you can destroy based off identifier
 Todoable::List.destroy(list_id)
 ```
 
+
 **POST /lists/:list\_id/items**
 
 Add an item to a given list. This can be done in two ways
@@ -91,6 +96,7 @@ list.add_item('Name of Item')
 
 Todoable::Item.new(list: list, name: 'Name of Item').create
 ```
+
 
 **PUT /lists/:list\_id/items/:item\_id/finish**
 
@@ -104,10 +110,21 @@ item = list.items.first
 item.finish!
 ```
 
+
 **DELETE /lists/:list\_id/items/:item\_id**
 
 Deletes the item.
 
 ```ruby
 item.destroy
+```
+
+
+## Testing
+
+Tests can be found in the `spec` directory, and can be run via `rspec`:
+
+```bash
+cd path/to/todoable
+bundle exec rspec spec
 ```
