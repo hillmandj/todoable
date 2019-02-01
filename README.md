@@ -43,7 +43,7 @@ lists = Todoable::List.all
 
 **POST /lists**
 
-Creates a list. Currently, the API only supports
+Creates a list. Currently, the API only supports name
 
 ```ruby
 list = Todoable::List.new(name: 'My List')
